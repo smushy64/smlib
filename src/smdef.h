@@ -84,64 +84,54 @@ typedef double f64;
 #endif
 
 // platform defines
-typedef enum {
-    SM_PLATFORM_UNKNOWN,
 
-    SM_PLATFORM_WINDOWS,
-    SM_PLATFORM_LINUX  ,
-    SM_PLATFORM_ANDROID,
-    SM_PLATFORM_MACOS  ,
-    SM_PLATFORM_IOS    ,
-
-    SM_PLATFORM_COUNT,
-} sm_platform_t;
-
-#if defined(_WIN32) || defined(__WIN32__) || defined(__WIN64) || defined(__WIN64__)
-    #define SM_CURRENT_PLATFORM SM_PLATFORM_WINDOWS
+#if defined(_WIN32) || defined(__WIN32__) || defined(_WIN64) || defined(__WIN64__)
+    #define SM_PLATFORM_WINDOWS
 #elif defined(__linux__) || defined(__gnu_linux__)
-    #define SM_CURRENT_PLATFORM SM_PLATFORM_LINUX
+    #define SM_PLATFORM_LINUX
 #elif defined(__ANDROID__)
-    #define SM_CURRENT_PLATFORM SM_PLATFORM_ANDROID
+    #define SM_PLATFORM_ANDROID
 #elif defined(__APPLE__)
     #include <TargetConditionals.h>
     #if defined(TARGET_IPHONE_SIMULATION) || defined(TARGET_OS_IPHONE)
-        #define SM_CURRENT_PLATFORM SM_PLATFORM_IOS
+        #define SM_PLATFORM_IOS
     #elif defined(TARGET_OS_MAC)
-        #define SM_CURRENT_PLATFORM SM_PLATFORM_MACOS
+        #define SM_PLATFORM_MACOS
     #endif
 #else
-    #define SM_CURRENT_PLATFORM SM_PLATFORM_UNKNOWN
+    #define SM_PLATFORM_UNKNOWN
 #endif
 
 // platform cpu defines
-typedef enum {
-    SM_PLATFORM_CPU_UNKNOWN,
-
-    SM_PLATFORM_CPU_X86_32,
-    SM_PLATFORM_CPU_X86_64,
-
-    SM_PLATFORM_CPU_ARM_32,
-    SM_PLATFORM_CPU_ARM_64,
-
-    SM_PLATFORM_CPU_COUNT
-} sm_platform_cpu_t;
 
 #if defined(_M_IX86) || defined(__i386__)
-    #define SM_CURRENT_PLATFORM_CPU SM_PLATFORM_CPU_X86_32
-#elif defined(__x86_64__) || defined(_M_X64_)
-    #define SM_CURRENT_PLATFORM_CPU SM_PLATFORM_CPU_X86_64
-#elif defined(__arm__) || defined(_M_ARM_)
-    #define SM_CURRENT_PLATFORM_CPU SM_PLATFORM_CPU_ARM_32
-#elif defined(__aarch64__)
-    #define SM_CURRENT_PLATFORM_CPU SM_PLATFORM_CPU_ARM_64
-#else
-    #define SM_CURRENT_PLATFORM_CPU SM_PLATFORM_CPU_UNKNOWN
+    #define SM_ARCH_X86
+    #define SM_ARCH_32_BIT
 #endif
 
-#if SM_CURRENT_PLATFORM_CPU == SM_PLATFORM_CPU_X86_32 || SM_CURRENT_PLATFORM_CPU == SM_PLATFORM_CPU_X86_64
-    #define SM_CURRENT_PLATFORM_X86
-#elif SM_CURRENT_PLATFORM_CPU == SM_PLATFORM_CPU_ARM_32 || SM_CURRENT_PLATFORM_CPU == SM_PLATFORM_CPU_ARM_64
-    #define SM_CURRENT_PLATFORM_ARM
+#if defined(__x86_64__) || defined(_M_X64_)
+    #if !defined(SM_ARCH_X86)
+        #define SM_ARCH_X86
+    #endif
+    #if defined(SM_ARCH_32_BIT)
+        #undef SM_ARCH_32_BIT
+    #endif
+    #define SM_ARCH_64_BIT
+#endif
+
+#if defined(__arm__) || defined(_M_ARM_)
+    #define SM_ARCH_ARM
+    #define SM_ARCH_32_BIT
+#endif
+
+#if defined(__aarch64__)
+    #if !defined(SM_ARCH_ARM)
+        #define SM_ARCH_ARM
+    #endif
+    #if defined(SM_ARCH_32_BIT)
+        #undef SM_ARCH_32_BIT
+    #endif
+    #define SM_ARCH_64_BIT
 #endif
 
 #if defined(__cplusplus)

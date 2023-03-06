@@ -16,7 +16,7 @@
     #define SMUSHY_SIMD_WIDTH 1
 #endif
 
-#if defined(SM_CURRENT_PLATFORM_X86) 
+#if defined(SM_ARCH_X86)
     #if SMUSHY_SIMD_WIDTH >= 4
         typedef __attribute((vector_size(16))) float __m128;
     #endif

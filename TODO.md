@@ -9,4 +9,5 @@
     - [ ] loading Wavefront OBJ files
 - [ ] smath C
 - [ ] separate SIMD abstractions from smath into its own thing
+- [x] fix smdef platform and architecture defines
 

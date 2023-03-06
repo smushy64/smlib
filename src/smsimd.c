@@ -9,9 +9,9 @@
 // TODO(alicia): x86 AVX
 
 #if SMUSHY_SIMD_WIDTH != 1
-    #if defined(SM_CURRENT_PLATFORM_X86)
+    #if defined(SM_ARCH_X86)
         #include <immintrin.h>
-    #elif defined(SM_CURRENT_PLATFORM_ARM)
+    #elif defined(SM_ARCH_ARM)
         #include <arm_neon.h>
     #endif
 #endif
@@ -111,7 +111,7 @@ void lane4f_store( lane4f_t registers, f32* store_array ) {
 #endif // scalar
 
 // SSE
-#if defined(SM_CURRENT_PLATFORM_X86) && SMUSHY_SIMD_WIDTH == 4
+#if defined(SM_ARCH_X86) && SMUSHY_SIMD_WIDTH == 4
 
     lane4f_t lane4f_set( f32 a, f32 b, f32 c, f32 d ) {
         lane4f_t result;
@@ -165,7 +165,7 @@ void lane4f_store( lane4f_t registers, f32* store_array ) {
 #endif // SSE
 
 // AVX
-#if defined(SM_CURRENT_PLATFORM_X86) && SMUSHY_SIMD_WIDTH == 8
+#if defined(SM_ARCH_X86) && SMUSHY_SIMD_WIDTH == 8
 
 
 
