@@ -65,13 +65,18 @@ typedef float  f32;
 /// 64-bit IEEE-754 floating-point number
 typedef double f64;
 
-// panic and export/import definitions 
+// panic
+// export/import definitions 
 // static assertions
+// always/never inline
 #if defined(_MSC_VER)
     #include <intrin.h>
     #define PANIC() __debugbreak()
 
     #define STATIC_ASSERT static_assert
+
+    #define SM_INLINE __forceinline
+    #define SM_NOINLINE __declspec(noinline)
 
     #if defined(SMEXPORT)
         #define SMAPI __declspec(dllexport)
@@ -83,6 +88,9 @@ typedef double f64;
     #define PANIC() __builtin_trap()
 
     #define STATIC_ASSERT _Static_assert
+
+    #define SM_INLINE __attribute__((always_inline)) inline
+    #define SM_NOINLINE __attribute__((noinline))
 
     #if defined(SMEXPORT)
         #define SMAPI __attribute__((visibility("default")))
