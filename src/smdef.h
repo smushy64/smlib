@@ -44,6 +44,10 @@ typedef uint32_t bool32;
 #if !defined(__cplusplus)
     /// 8-bit boolean
     typedef uint8_t bool;
+    #define true 1
+    #define false 0
+    #define NULL 0
+    #define nullptr 0
 #endif
 
 #define TRUE  1
@@ -62,9 +66,12 @@ typedef float  f32;
 typedef double f64;
 
 // panic and export/import definitions 
+// static assertions
 #if defined(_MSC_VER)
     #include <intrin.h>
     #define PANIC() __debugbreak()
+
+    #define STATIC_ASSERT static_assert
 
     #if defined(SMEXPORT)
         #define SMAPI __declspec(dllexport)
@@ -75,6 +82,8 @@ typedef double f64;
 #else // not MSVC
     #define PANIC() __builtin_trap()
 
+    #define STATIC_ASSERT _Static_assert
+
     #if defined(SMEXPORT)
         #define SMAPI __attribute__((visibility("default")))
     #else // import
@@ -83,8 +92,21 @@ typedef double f64;
     #endif
 #endif
 
-// platform defines
+// assert that type sizes are correct
+STATIC_ASSERT(sizeof(u8)  == 1, "Expected u8 to be 1 byte!");
+STATIC_ASSERT(sizeof(u16) == 2, "Expected u16 to be 2 bytes!");
+STATIC_ASSERT(sizeof(u32) == 4, "Expected u32 to be 4 bytes!");
+STATIC_ASSERT(sizeof(u64) == 8, "Expected u64 to be 8 bytes!");
+STATIC_ASSERT(sizeof(i8)  == 1, "Expected i8 to be 1 byte!");
+STATIC_ASSERT(sizeof(i16) == 2, "Expected i16 to be 2 bytes!");
+STATIC_ASSERT(sizeof(i32) == 4, "Expected i32 to be 4 bytes!");
+STATIC_ASSERT(sizeof(i64) == 8, "Expected i64 to be 8 bytes!");
+STATIC_ASSERT(sizeof(f32) == 4, "Expected f32 to be 4 bytes!");
+STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes!");
 
+STATIC_ASSERT(sizeof(usize) == sizeof(u64), "Expected to be running on 64 bit architecture!");
+
+// platform defines
 #if defined(_WIN32) || defined(__WIN32__) || defined(_WIN64) || defined(__WIN64__)
     #define SM_PLATFORM_WINDOWS
 #elif defined(__linux__) || defined(__gnu_linux__)
@@ -103,7 +125,6 @@ typedef double f64;
 #endif
 
 // platform cpu defines
-
 #if defined(_M_IX86) || defined(__i386__)
     #define SM_ARCH_X86
     #define SM_ARCH_32_BIT
@@ -132,6 +153,12 @@ typedef double f64;
         #undef SM_ARCH_32_BIT
     #endif
     #define SM_ARCH_64_BIT
+#endif
+
+#if defined(SM_ARCH_32_BIT)
+    STATIC_ASSERT(sizeof(usize) == sizeof(u32), "Expected to be running on 32 bit architecture!");
+#elif defined(SM_ARCH_64_BIT)
+    STATIC_ASSERT(sizeof(usize) == sizeof(u64), "Expected to be running on 64 bit architecture!");
 #endif
 
 #if defined(__cplusplus)
