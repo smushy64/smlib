@@ -169,6 +169,9 @@ STATIC_ASSERT(sizeof(usize) == sizeof(u64), "Expected to be running on 64 bit ar
     STATIC_ASSERT(sizeof(usize) == sizeof(u64), "Expected to be running on 64 bit architecture!");
 #endif
 
+// tell compiler that value is unused
+#define SM_UNUSED(x) x = x
+
 #if defined(__cplusplus)
     /// 32-bit floating point constants
     namespace F32 {
