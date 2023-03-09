@@ -65,11 +65,37 @@ typedef float  f32;
 /// 64-bit IEEE-754 floating-point number
 typedef double f64;
 
+/// compiler defines
+#if defined(__GNUC__) || defined(__GNUG__)
+    #define SM_COMPILER_GCC
+#endif
+
+#if defined(__clang__)
+    #if defined(SM_COMPILER_GCC)
+        #undef SM_COMPILER_GCC
+    #endif
+    #define SM_COMPILER_CLANG
+#endif
+
+#if defined(_MSC_VER)
+    #if defined(SM_COMPILER_GCC)
+        #undef SM_COMPILER_GCC
+    #endif
+    #if defined(SM_COMPILER_CLANG)
+        #undef SM_COMPILER_CLANG
+    #endif
+    #define SM_COMPILER_MSVC
+#endif
+
+#if !defined(SM_COMPILER_GCC) && !defined(SM_COMPILER_CLANG) && !defined(SM_COMPILER_MSVC)
+    #define SM_COMPILER_UNKNOWN
+#endif
+
 // panic
 // export/import definitions 
 // static assertions
 // always/never inline
-#if defined(_MSC_VER)
+#if defined(SM_COMPILER_MSVC)
     #include <intrin.h>
     #define PANIC() __debugbreak()
 
@@ -87,6 +113,7 @@ typedef double f64;
 #else // not MSVC
     #define PANIC() __builtin_trap()
 
+    // TODO(alicia): there was some weird issue with static assert and gcc, look into that
     #define STATIC_ASSERT _Static_assert
 
     #define SM_INLINE __attribute__((always_inline)) inline
@@ -169,7 +196,7 @@ STATIC_ASSERT(sizeof(usize) == sizeof(u64), "Expected to be running on 64 bit ar
     STATIC_ASSERT(sizeof(usize) == sizeof(u64), "Expected to be running on 64 bit architecture!");
 #endif
 
-// tell compiler that value is unused
+/// tell compiler that value is unused
 #define SM_UNUSED(x) x = x
 
 #if defined(__cplusplus)
