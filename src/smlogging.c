@@ -6,7 +6,7 @@
 #include "smlogging.h"
 #include <stdio.h>
 
-#if SM_CURRENT_PLATFORM == SM_PLATFORM_WINDOWS
+#if defined(SM_PLATFORM_WINDOWS)
     #include <windows.h>
     HANDLE WIN_CONSOLE_HANDLE;
 #endif
@@ -17,7 +17,7 @@ void smlogging_initialize( uint32_t level ) {
     #if defined(SMUSHY_LOGGING_ENABLED)
         // check if it's a valid debug level?
         GLOBAL_LEVEL = (logging_level_t)level;
-        #if SM_CURRENT_PLATFORM == SM_PLATFORM_WINDOWS
+        #if defined(SM_PLATFORM_WINDOWS)
 
             WIN_CONSOLE_HANDLE = GetStdHandle( STD_OUTPUT_HANDLE );
             DWORD dwMode = 0;
@@ -45,11 +45,11 @@ const char* const LOGGING_COLOR_CODES[LOGGING_COLOR_COUNT] = {
 
 void smlogging_set_color( logging_color_t color ) {
     #if defined(SMUSHY_LOGGING_ENABLED)
-        printf(LOGGING_COLOR_CODES[color]);
+        printf("%s", LOGGING_COLOR_CODES[color]);
     #endif
 }
 
-uint32_t smlogging_level_valid( logging_level_mask32 level ) {
+SM_INLINE uint32_t smlogging_level_valid( logging_level_mask32 level ) {
     #if defined(SMUSHY_LOGGING_ENABLED)
         return (level & GLOBAL_LEVEL) == level;
     #endif
@@ -87,14 +87,3 @@ void smlogging_printf(
 }
 
 
-//     smlog_set_color( SMUSHY_LOG_COLOR_RESET );
-//
-//     va_list args;
-//     va_start( args, message );
-//     vprintf( message, args );
-//     va_end( args );
-//
-//     printf("\n");
-//
-//     #endif
-// }
