@@ -11,6 +11,11 @@
 
 #include "smdef.h"
 
+#if defined(SM_COMPILER_CLANG)
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
+
 #if defined(__x86_64__) || defined(_M_X64)
     #define SMUSHY_X86_64_PLATFORM
 #endif
@@ -2979,5 +2984,9 @@ void rand( xor_shift64& state, f64& next );
 // NOTE(alicia): perlin noise
 
 } // namespace smath
+
+#if defined(SM_COMPILER_CLANG) && !defined(_CLANGD) // disable clangd erroneous warning
+    #pragma clang diagnostic pop
+#endif
 
 #endif

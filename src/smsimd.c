@@ -16,7 +16,7 @@
     #endif
 #endif
 
-#if defined(_MSC_VER)
+#if defined(SM_COMPILER_MSVC)
     #include <math.h>
     #define __builtin_sqrtf sqrtf
 #endif

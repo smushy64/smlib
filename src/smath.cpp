@@ -6,6 +6,11 @@
 */
 #include "smath.hpp"
 
+#if defined(SM_COMPILER_CLANG)
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
+
 #if defined(SMUSHY_SIMD_ENABLED)
 
     #if defined(SMUSHY_X86_64_PLATFORM)
@@ -3238,3 +3243,8 @@ void rand( xor_shift64& state, f64& next ) {
 }
 
 } // namespace smath
+
+#if defined(SM_COMPILER_CLANG) && !defined(_CLANGD) // disable erroneous clangd warning
+    #pragma clang diagnostic pop
+#endif
+

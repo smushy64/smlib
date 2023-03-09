@@ -10,14 +10,10 @@
 
 // NOTE(alicia): helper functions
 
-#if defined(__GNUC__) || defined(__clang__)
-
-#define vsnprintf __builtin_vsnprintf
-
-#elif defined(_MSC_VER)
-
-#include <stdio.h>
-
+#if defined(SM_COMPILER_GCC) || defined(SM_COMPILER_CLANG)
+    #define vsnprintf __builtin_vsnprintf
+#elif defined(SM_COMPILER_MSVC)
+    #include <stdio.h>
 #endif
 
 typedef enum {
