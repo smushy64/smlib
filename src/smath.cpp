@@ -226,7 +226,7 @@ namespace simd {
 lane4f::lane4f() : simd( _mm_setzero_ps() ) {}
 lane4f::lane4f( f32 a, f32 b, f32 c, f32 d ) : simd( _mm_setr_ps( a, b, c, d ) ) {}
 lane4f::lane4f( f32 scalar ) : simd( _mm_set1_ps( scalar ) ) {}
-lane4f::lane4f( const f32* four_wide_array ) : simd( _mm_load_ps( four_wide_array ) ) {}
+lane4f::lane4f( const f32* four_wide_array ) : simd( _mm_loadu_ps( four_wide_array ) ) {}
 f32& lane4f::operator[]( u32 index ) { return (&a)[index]; }
 f32  lane4f::operator[]( u32 index ) const { return simd[index]; }
 lane4f& lane4f::operator+=( const lane4f& rhs ) {
@@ -250,14 +250,14 @@ lane4f sqrt( lane4f x ) {
     return x;
 }
 void store( f32* four_wide_array, lane4f registers ) {
-    _mm_store_ps( four_wide_array, registers.simd );
+    _mm_storeu_ps( four_wide_array, registers.simd );
 }
 
 lane8f::lane8f() : simd( _mm256_setzero_ps() ) {}
 lane8f::lane8f( f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g, f32 h )
 : simd( _mm256_setr_ps( a, b, c, d, e, f, g, h ) ){}
 lane8f::lane8f( f32 scalar ) : simd( _mm256_set1_ps( scalar ) ) {}
-lane8f::lane8f( const f32* eight_wide_array ) : simd( _mm256_load_ps( eight_wide_array ) ) {}
+lane8f::lane8f( const f32* eight_wide_array ) : simd( _mm256_loadu_ps( eight_wide_array ) ) {}
 f32& lane8f::operator[]( u32 index ) { return (&a)[index]; }
 f32  lane8f::operator[]( u32 index ) const { return simd[index]; }
 lane8f& lane8f::operator+=( const lane8f& rhs ) {
@@ -281,7 +281,7 @@ lane8f sqrt( lane8f x ) {
     return x;
 }
 void store( f32* eight_wide_array, lane8f registers ) {
-    _mm256_store_ps( eight_wide_array, registers.simd );
+    _mm256_storeu_ps( eight_wide_array, registers.simd );
 }
 lane4f extract_high( lane8f a ) {
     lane4f result;
