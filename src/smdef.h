@@ -101,13 +101,13 @@ typedef double f64;
 
     #define STATIC_ASSERT static_assert
 
-    #define SM_INLINE __forceinline
+    #define SM_ALWAYSINLINE __forceinline
     #define SM_NOINLINE __declspec(noinline)
 
-    #if defined(SMEXPORT)
-        #define SMAPI __declspec(dllexport)
+    #if defined(SM_EXPORT)
+        #define SM_API __declspec(dllexport)
     #else // import
-        #define SMAPI __declspec(dllimport)
+        #define SM_API __declspec(dllimport)
     #endif
 
 #else // not MSVC
@@ -116,14 +116,14 @@ typedef double f64;
     // TODO(alicia): there was some weird issue with static assert and gcc, look into that
     #define STATIC_ASSERT _Static_assert
 
-    #define SM_INLINE __attribute__((always_inline)) inline
+    #define SM_ALWAYSINLINE __attribute__((always_inline)) inline
     #define SM_NOINLINE __attribute__((noinline))
 
-    #if defined(SMEXPORT)
-        #define SMAPI __attribute__((visibility("default")))
+    #if defined(SM_EXPORT)
+        #define SM_API __attribute__((visibility("default")))
     #else // import
         // unknown?
-        #define SMAPI 
+        #define SM_API 
     #endif
 #endif
 

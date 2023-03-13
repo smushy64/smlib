@@ -6,3 +6,5 @@ compile_flags.txt
 *.gch
 Makefile
 src/tests
+src/smath_old.cpp
+src/smath_old.hpp
